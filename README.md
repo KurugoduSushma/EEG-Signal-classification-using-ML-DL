@@ -56,9 +56,23 @@ The system classifies EEG signals into multiple neurological conditions such as:
 * Seaborn
 * Matplotlib
 
-### 🗄️ Database
+### Database
 
 * MySQL
+
+ ### 🗄️ Database Setup (Using XAMPP)
+
+This project uses XAMPP (Apache + MySQL) to manage the database connection between the frontend (Flask app) and backend logic.
+
+🔧 Steps to Configure XAMPP
+
+* Install and open XAMPP Control Panel
+* Start:
+    * ✅ Apache
+    * ✅ MySQL
+  
+Open phpMyAdmin
+👉 http://localhost/phpmyadmin
 
 ### 🔧 Tools & Libraries
 
