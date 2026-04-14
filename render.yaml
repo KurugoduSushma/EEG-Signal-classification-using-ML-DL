@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: eeg-frontend
+    env: python
+    plan: free
+    buildCommand: pip install -r FRONTEND/requirements.txt
+    startCommand: gunicorn app:app
+    repo: https://github.com/KurugoduSushma/EEG-Signal-classification-using-ML-DL
+    branch: main
+    rootDir: FRONTEND
+    envVars:
+      - key: DB_HOST
+        value: ""
+      - key: DB_USER
+        value: ""
+      - key: DB_PASS
+        value: ""
+      - key: DB_NAME
+        value: ""
