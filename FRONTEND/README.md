@@ -1,55 +1,68 @@
-# EEG Classification Frontend
+# 🧠 EEG Classification Frontend
 
-Simple Flask frontend for EEG signal classification (templates + static assets).
+A Flask-based web application for EEG signal classification that allows users to upload datasets, view model performance, and predict neurological disorders in real time.
 
-Quick start (local):
+---
 
-1. Create & activate a Python virtual environment.
+
+## ▶️ Quick Start (Local Setup)
+
+### 1. Create Virtual Environment
 
 ```bash
 python -m venv .venv
+
 # Windows PowerShell
 .venv\Scripts\Activate.ps1
-# or cmd
+
+# CMD
 .venv\Scripts\activate
 ```
 
-2. Install dependencies:
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the app locally:
+### 3. Run Application
 
 ```bash
-# for development
 python app.py
-
-# or use gunicorn (production-like)
-gunicorn app:app
 ```
 
-Deployment / Database
+App will run at:
 
-- The app expects a MySQL database for user accounts. By default it reads connection info from environment variables:
-	- `DB_HOST` (default: `localhost`)
-	- `DB_PORT` (default: `3306`)
-	- `DB_USER` (default: `root`)
-	- `DB_PASS` (default: empty)
-	- `DB_NAME` (default: `eeg_users`)
-
-- For local development using XAMPP/MySQL, ensure MySQL is running and create the database (example):
-
-```sql
-CREATE DATABASE eeg_users;
 ```
+http://127.0.0.1:5000/
+```
+---
 
-Then start the app as described above. The application will create the `users` table on first run if it does not exist.
+## 📁 Important Folders
 
-Model & storage notes:
+* `templates/` → HTML pages (Login, Register, Upload, Predict)
+* `static/` → CSS, images, UI assets
+* `uploads/` → User uploaded datasets
+* `eeg_saved_models/` → Trained ML models
+* `app.py` → Main Flask application
 
-- Large model files are ignored by `.gitignore`. Upload your trained models to a cloud storage (S3, GCS) or Render Disk and update `MODEL_PATH` in `app.py` accordingly.
-- Avoid committing sensitive files (passwords, DB dumps).
+---
 
-If you want, I can initialize a Git repo and push this `FRONTEND` folder to GitHub for you.
+## 🤖 Model Integration
+
+* Uses pre-trained models (Random Forest, etc.)
+* Models loaded using `joblib`
+* Preprocessing includes:
+
+  * Scaling (StandardScaler)
+  * Feature Selection (SelectKBest)
+  * Encoding
+
+---
+
+
+## 🎯 Summary
+
+This frontend acts as the interface layer connecting users with machine learning models, enabling seamless EEG data processing, visualization, and prediction through a web-based system.
+
+---
