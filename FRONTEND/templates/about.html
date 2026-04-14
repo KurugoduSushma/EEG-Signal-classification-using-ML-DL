@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - EEG Classification</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home') }}">EEG Classification</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('upload') }}">Upload</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('algo') }}">Algorithms</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('predict') }}">Predict</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>About EEG Classification Project</h1>
+        <p class="lead">This project aims to classify neurological disorders using EEG signals. We employ advanced machine learning and deep learning models, including Random Forest, XGBoost, and neural networks, to analyze EEG data and predict disorders such as Anxiety, Mood Disorders, Schizophrenia, and more.</p>
+        <p>Our system allows users to:</p>
+        <ul>
+            <li>Upload EEG datasets for analysis.</li>
+            <li>View model accuracies and performance metrics.</li>
+            <li>Obtain predictions for new EEG data samples.</li>
+        </ul>
+        <p>The models were trained on the EEG dataset, achieving high accuracy through feature selection, preprocessing, and hyperparameter tuning. This web application provides an intuitive interface for researchers and clinicians to interact with the models.</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+\# Python envs
+.venv/
+venv/
+env/
+
+\# OS files
+.DS_Store
+Thumbs.db
+
+\# Logs
+*.log
+
+\# Data and models
+BACKEND/EEG_dataset.csv
+BACKEND/*.csv
+FRONTEND/eeg_saved_models/
+FRONTEND/*.pkl
+FRONTEND/uploads/
+
+\# IDE
+.vscode/
