@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-import mysql.connector
+import sqlite3
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier 
@@ -29,14 +29,33 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = 'eeg_secret_key_2025'
 
-# MySQL configurations
-db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'port': 3306,
-    'password': '',  # Replace with your MySQL password
-    'database': 'eeg_users'
-}
+# SQLite configuration
+DB_FILE = os.getenv('DB_PATH', os.path.join(os.path.dirname(__file__), 'app.db'))
+
+def get_db_connection():
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def init_db():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        '''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL
+        )
+        '''
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+# Ensure DB exists and has required tables
+init_db()
 
 # Paths
 MODEL_PATH = 'eeg_saved_models/'
@@ -97,16 +116,18 @@ def register():
         email = request.form['email']
         password = request.form['password']
         try:
-            conn = mysql.connector.connect(**db_config)
+            conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", 
+            cursor.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", 
                           (username, email, password))
             conn.commit()
             cursor.close()
             conn.close()
             flash('Registration successful! Please log in.', 'success')
             return redirect(url_for('login'))
-        except mysql.connector.Error as e:
+        except sqlite3.IntegrityError as e:
+            flash('Registration failed: email already registered', 'danger')
+        except Exception as e:
             flash(f'Registration failed: {str(e)}', 'danger')
     return render_template('register.html')
 
@@ -116,9 +137,9 @@ def login():
         email = request.form['email']
         password = request.form['password']
         try:
-            conn = mysql.connector.connect(**db_config)
+            conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT id, username, email, password FROM users WHERE email = %s", (email,))
+            cursor.execute("SELECT id, username, email, password FROM users WHERE email = ?", (email,))
             user = cursor.fetchone()
             cursor.close()
             conn.close()
@@ -129,7 +150,7 @@ def login():
                 return redirect(url_for('home'))
             else:
                 flash('Invalid email or password', 'danger')
-        except mysql.connector.Error as e:
+        except Exception as e:
             flash(f'Login failed: {str(e)}', 'danger')
     return render_template('login.html')
 
