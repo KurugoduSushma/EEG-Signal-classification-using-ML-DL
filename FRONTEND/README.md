@@ -30,9 +30,22 @@ python app.py
 gunicorn app:app
 ```
 
-Deployment:
+Deployment / Database
 
-- Run locally using the Quick start instructions above. The app uses a local SQLite database by default (file `app.db` in the `FRONTEND` folder). To override the DB file path, set the `DB_PATH` environment variable to an absolute path.
+- The app expects a MySQL database for user accounts. By default it reads connection info from environment variables:
+	- `DB_HOST` (default: `localhost`)
+	- `DB_PORT` (default: `3306`)
+	- `DB_USER` (default: `root`)
+	- `DB_PASS` (default: empty)
+	- `DB_NAME` (default: `eeg_users`)
+
+- For local development using XAMPP/MySQL, ensure MySQL is running and create the database (example):
+
+```sql
+CREATE DATABASE eeg_users;
+```
+
+Then start the app as described above. The application will create the `users` table on first run if it does not exist.
 
 Model & storage notes:
 

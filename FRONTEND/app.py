@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-import sqlite3
+import mysql.connector
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier 
@@ -29,33 +29,17 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = 'eeg_secret_key_2025'
 
-# SQLite configuration
-DB_FILE = os.getenv('DB_PATH', os.path.join(os.path.dirname(__file__), 'app.db'))
+# MySQL configurations (read from environment)
+db_config = {
+    'host': os.getenv('DB_HOST', 'localhost'),
+    'user': os.getenv('DB_USER', 'root'),
+    'port': int(os.getenv('DB_PORT', 3306)),
+    'password': os.getenv('DB_PASS', ''),
+    'database': os.getenv('DB_NAME', 'eeg_users')
+}
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-def init_db():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        '''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            password TEXT NOT NULL
-        )
-        '''
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-# Ensure DB exists and has required tables
-init_db()
+    return mysql.connector.connect(**db_config)
 
 # Paths
 MODEL_PATH = 'eeg_saved_models/'
@@ -118,14 +102,14 @@ def register():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", 
+            cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", 
                           (username, email, password))
             conn.commit()
             cursor.close()
             conn.close()
             flash('Registration successful! Please log in.', 'success')
             return redirect(url_for('login'))
-        except sqlite3.IntegrityError as e:
+        except mysql.connector.IntegrityError as e:
             flash('Registration failed: email already registered', 'danger')
         except Exception as e:
             flash(f'Registration failed: {str(e)}', 'danger')
@@ -139,7 +123,7 @@ def login():
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT id, username, email, password FROM users WHERE email = ?", (email,))
+            cursor.execute("SELECT id, username, email, password FROM users WHERE email = %s", (email,))
             user = cursor.fetchone()
             cursor.close()
             conn.close()
