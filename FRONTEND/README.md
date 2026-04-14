@@ -30,12 +30,9 @@ python app.py
 gunicorn app:app
 ```
 
-Render deployment notes:
+Deployment:
 
-- A `Procfile` is included (`web: gunicorn app:app`).
-- Push this folder to a GitHub repo, then create a Web Service on render.com.
-- On Render set the build command to `pip install -r requirements.txt` and the start command to `gunicorn app:app`.
-- The app now uses a local SQLite database by default (file `app.db` in the `FRONTEND` folder). To override the DB file path, set the `DB_PATH` environment variable to an absolute path.
+- Run locally using the Quick start instructions above. The app uses a local SQLite database by default (file `app.db` in the `FRONTEND` folder). To override the DB file path, set the `DB_PATH` environment variable to an absolute path.
 
 Model & storage notes:
 

@@ -17,5 +17,8 @@ FRONTEND/eeg_saved_models/
 FRONTEND/*.pkl
 FRONTEND/uploads/
 
+# SQL dumps
+*.sql
+
 \# IDE
 .vscode/
